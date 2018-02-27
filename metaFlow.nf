@@ -7,6 +7,34 @@ IN_trimmomatic_opts = Channel
                         params.trimTrailing,
                         params.trimMinLength])
 
+/** INTEGRITY_COVERAGE - MAIN
+This process will check the integrity, encoding and get the estimated
+coverage for each FastQ pair. Corrupted FastQ files will also be detected
+and filtered here.
+*/
+process integrity_coverage {
+
+    tag { fastq_id }
+
+    // This process can only use a single CPU
+    cpus 1
+
+	input:
+	set fastq_id, file(fastq_pair) from startReads
+	val gsize from Channel.value(0)
+	val cov from Channel.value(0)
+	// This channel is for the custom options of the integrity_coverage.py
+	// script. See the script's documentation for more information.
+	val opts from Channel.value('')
+
+	output:
+	set fastq_id, file('*_phred') into SIDE_phred
+	set fastq_id, file(fastq_pair) into integrityReads
+
+	script:
+	template "integrity_coverage.py"
+}
+
 /** FASTQC - MAIN
 This process will perform the fastQC analysis for each sample. In this run,
 the output files (summary and data) of FastQC are sent to the output channel
@@ -17,7 +45,7 @@ process fastQC {
         tag { fastq_id }
 
         input:
-        set fastq_id, file(fastq_pair) from startReads
+        set fastq_id, file(fastq_pair) from integrityReads
         val ad from Channel.value('None')
 
         output:
@@ -58,7 +86,6 @@ process fastqc_report {
 This process will execute trimmomatic. Currently, the main channel requires
 information on the trim_range and phred score.
 */
-/**
 process trimmomatic {
 
     tag { fastq_id }
@@ -79,4 +106,4 @@ process trimmomatic {
     script:
     template "trimmomatic.py"
 }
-*/
+
