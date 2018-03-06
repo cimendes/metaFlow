@@ -96,7 +96,7 @@ process trimmomatic {
     val opts from IN_trimmomatic_opts
 
     output:
-    set fastq_id, "${fastq_id}_*P*", "${fastq_id}_*U*" optional true into MAIN_trimmomatic_out
+    set fastq_id, "${fastq_id}_*P*", "${fastq_id}_*U*" into MAIN_trimmomatic_out
     //set fastq_id, "${fastq_id}_*P*" optional true into MAIN_trimmomatic_out, SIDE_bowtie_in
     set fastq_id, val("trimmomatic"), file(".status") into STATUS_trimmomatic
     file '*_trimlog.txt' optional true into LOG_trimmomatic
