@@ -96,14 +96,44 @@ process trimmomatic {
     val opts from IN_trimmomatic_opts
 
     output:
-    set fastq_id, "${fastq_id}_*P*" optional true into MAIN_trimmomatic_out, SIDE_bowtie_in
+    set fastq_id, "${fastq_id}_*P*", "${fastq_id}_*U*" optional true into MAIN_trimmomatic_out
+    //set fastq_id, "${fastq_id}_*P*" optional true into MAIN_trimmomatic_out, SIDE_bowtie_in
     set fastq_id, val("trimmomatic"), file(".status") into STATUS_trimmomatic
     file '*_trimlog.txt' optional true into LOG_trimmomatic
-
-    //when:
-    //params.stopAt != "trimmomatic"
 
     script:
     template "trimmomatic.py"
 }
 
+/** BOWTIE2 - MAIN
+This process will execute Bowtie2 with the hg19 indexed genome, located  in the
+src directory.
+*/
+process bowtie {
+
+    tag { fastq_id }
+
+
+    input:
+    set fastq_id, file(fastq_pair), file (fastq_unpair) from MAIN_trimmomatic_out_paired
+
+    output:
+    file "*.bam"
+
+    script:
+
+    println(${fastq_pair})
+    println(${fastq_unpair})
+
+    """
+    echo "${fastq_pair}"
+    echo "${fastq_unpair}"
+
+    //bowtie2 -x src/bowtie_index/hg19 -1 ${fastq_pair[0]} -2 ${fastq_pair[1]}  > $fastq_id.bam
+
+    //samtools view -buh -f 12 -o $output_dir$filename.bam -@ 2 $bowtie_output_dir$sample
+	//samtools fastq -1 $clean_data$sample_1.fq -2 $clean_data$sample_2.fq $output_dir$filename.bam
+	//python ~/metagenomics_Natacha/renamePE_samtoolsFASTQ.py -1 $clean_data$sample_1.fq -2 $clean_data$sample_2.fq -o $clean_data_fastq
+	//gzip $clean_data_fastq$filename*.headersRenamed_*.fq
+    """
+}
