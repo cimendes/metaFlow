@@ -7,7 +7,7 @@ IN_trimmomatic_opts = Channel
                         params.trimTrailing,
                         params.trimMinLength])
 
-/** INTEGRITY_COVERAGE - MAIN
+/** 1. INTEGRITY_COVERAGE - MAIN
 This process will check the integrity, encoding and get the estimated
 coverage for each FastQ pair. Corrupted FastQ files will also be detected
 and filtered here.
@@ -21,8 +21,8 @@ process integrity_coverage {
 
 	input:
 	set fastq_id, file(fastq_pair) from startReads
-	val gsize from Channel.value(0)
-	val cov from Channel.value(0)
+	val gsize from Channel.value(1)
+	val cov from Channel.value(1)
 	// This channel is for the custom options of the integrity_coverage.py
 	// script. See the script's documentation for more information.
 	val opts from Channel.value('')
@@ -65,7 +65,7 @@ process fastqc_report {
     tag { fastq_id }
 
     cpus 1
-    publishDir 'reports/fastqc/run_1/', pattern: '*summary.txt', mode: 'copy'
+    //publishDir 'reports/fastqc/run_1/', pattern: '*summary.txt', mode: 'copy'
 
     input:
     set fastq_id, file(fastq_pair), file(result_p1), file(result_p2) from MAIN_fastqc_out
