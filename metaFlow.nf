@@ -115,7 +115,7 @@ process bowtie {
 
 
     input:
-    set fastq_id, file(fastq_pair), file (fastq_unpair) from MAIN_trimmomatic_out
+    set fastq_id, file(fastq_pair) from MAIN_trimmomatic_out
 
     output:
     file "*.bam"
