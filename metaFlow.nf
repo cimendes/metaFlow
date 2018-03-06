@@ -121,13 +121,9 @@ process bowtie {
     file "*.bam"
 
     script:
-
-    println(${fastq_pair})
-    println(${fastq_unpair})
-
     """
-    echo "${fastq_pair}"
-    echo "${fastq_unpair}"
+    echo ${fastq_pair}
+    echo ${fastq_unpair}
 
     //bowtie2 -x src/bowtie_index/hg19 -1 ${fastq_pair[0]} -2 ${fastq_pair[1]}  > $fastq_id.bam
 
