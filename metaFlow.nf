@@ -126,7 +126,6 @@ process bowtie {
 
     bowtie2 -x src/bowtie_index/hg19 -1 ${fastq_pair[0]} -2 ${fastq_pair[1]}  > $fastq_id.bam
 
-    echo ${$fastq_id.bam}
     """
 }
 
