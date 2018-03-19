@@ -126,6 +126,8 @@ process bowtie {
 
     bowtie2 -x /index_hg19/hg19 -1 ${fastq_pair[0]} -2 ${fastq_pair[1]}  > ${fastq_id}.bam
 
+    samtools view -buh -f 12 -o ${fastq_id}_samtools.bam -@ 2 ${fastq_id}.bam
+
     """
 }
 
