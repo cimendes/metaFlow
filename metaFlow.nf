@@ -130,6 +130,8 @@ process bowtie {
 
     samtools fastq -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq ${fastq_id}_samtools.bam
 
+    renamePE_samtoolsFASTQ.py -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq
+
 
     """
 }
