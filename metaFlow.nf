@@ -134,7 +134,7 @@ process bowtie {
 
     gzip *.headersRenamed_*.fq
 
-    echo ($ls *.headersRenamed_*.fq)
+    echo $(ls *.headersRenamed_*.fq)
 
     """
 }
