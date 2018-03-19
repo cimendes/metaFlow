@@ -128,11 +128,6 @@ process bowtie {
 
     samtools view -buh -f 12 -o ${fastq_id}_samtools.bam -@ 2 ${fastq_id}.bam
 
-    samtools fastq -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq ${fastq_id}_samtools.bam
-
-    gzip *.headersRenamed_*.fq
-
-    echo $(ls *.headersRenamed_*.fq)
 
     """
 }
@@ -146,5 +141,9 @@ process bowtie {
 	#python ~/metagenomics_Natacha/renamePE_samtoolsFASTQ.py -1 $clean_data$sample_1.fq -2 $clean_data$sample_2.fq -o $clean_data_fastq
 	#gzip $clean_data_fastq$filename*.headersRenamed_*.fq
 
-	renamePE_samtoolsFASTQ.py -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq 
+	renamePE_samtoolsFASTQ.py -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq
+
+	samtools fastq -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq ${fastq_id}_samtools.bam
+
+    gzip *.headersRenamed_*.fq
 */
