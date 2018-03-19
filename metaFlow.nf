@@ -128,6 +128,14 @@ process bowtie {
 
     samtools view -buh -f 12 -o ${fastq_id}_samtools.bam -@ 2 ${fastq_id}.bam
 
+    samtools fastq -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq ${fastq_id}_samtools.bam
+
+    renamePE_samtoolsFASTQ.py -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq -o .
+
+    gzip *.headersRenamed_*.fq
+
+    echo ($ls *.headersRenamed_*.fq)
+
     """
 }
 
