@@ -138,7 +138,7 @@ process bowtie {
 
 /**
 
-    #bowtie2 -x src/bowtie_index/hg19 -1 ${fastq_pair[0]} -2 ${fastq_pair[1]}  > $fastq_id.bam
+    #bowtie2 -x src/bowtie_index/hg19 -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -p 3 > $fastq_id.bam
 
     #samtools view -buh -f 12 -o $output_dir$filename.bam -@ 2 $bowtie_output_dir$sample
 	#samtools fastq -1 $clean_data$sample_1.fq -2 $clean_data$sample_2.fq $output_dir$filename.bam
