@@ -117,8 +117,8 @@ process bowtie {
     input:
     set fastq_id, file(fastq_pair) from MAIN_trimmomatic_out
 
-    //output:
-    //file "*.bam"
+    output:
+    file "*.headersRenamed_*.fq"
 
     script:
     """
@@ -132,7 +132,7 @@ process bowtie {
 
     python /NGStools/renamePE_samtools/renamePE_samtoolsFASTQ.py -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq
 
-
+    gzip *.headersRenamed_*.fq
     """
 }
 
