@@ -3,3 +3,5 @@ work/
 .nextflow/
 data/
 reports/
+.idea/
+
