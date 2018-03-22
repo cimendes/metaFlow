@@ -106,8 +106,8 @@ process trimmomatic {
 }
 
 /** BOWTIE2 - MAIN
-This process will execute Bowtie2 with the hg19 indexed genome, located  in the
-src directory.
+This process will execute Bowtie2 with the hg19 indexed genome.
+The unmapped reads will be saved and their headers renamed.
 */
 process bowtie {
 
@@ -118,7 +118,7 @@ process bowtie {
     set fastq_id, file(fastq_pair) from MAIN_trimmomatic_out
 
     output:
-    file "*.headersRenamed_*.fq.gz"
+    set fastq_if , "${fastq_id}*.headersRenamed_*.fq.gz" into UNMAPPED_out
 
     script:
     """
