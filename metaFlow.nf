@@ -65,7 +65,6 @@ process fastqc_report {
     tag { fastq_id }
 
     cpus 1
-    //publishDir 'reports/fastqc/run_1/', pattern: '*summary.txt', mode: 'copy'
 
     input:
     set fastq_id, file(fastq_pair), file(result_p1), file(result_p2) from MAIN_fastqc_out
@@ -74,8 +73,8 @@ process fastqc_report {
 
     output:
     set fastq_id, file(fastq_pair), '.status', 'optimal_trim' into MAIN_fastqc_trim
-    file '*_trim_report' into LOG_trim
-    file "*_status_report" into LOG_fastqc_report
+    //file '*_trim_report' into LOG_trim
+    //file "*_status_report" into LOG_fastqc_report
     file "${fastq_id}_*_summary.txt" optional true
 
     script:
@@ -97,9 +96,8 @@ process trimmomatic {
 
     output:
     set fastq_id, "${fastq_id}_*P*" into MAIN_trimmomatic_out
-    //set fastq_id, "${fastq_id}_*P*" optional true into MAIN_trimmomatic_out, SIDE_bowtie_in
-    set fastq_id, val("trimmomatic"), file(".status") into STATUS_trimmomatic
-    file '*_trimlog.txt' optional true into LOG_trimmomatic
+    //set fastq_id, val("trimmomatic"), file(".status") into STATUS_trimmomatic
+    //file '*_trimlog.txt' optional true into LOG_trimmomatic
 
     script:
     template "trimmomatic.py"
