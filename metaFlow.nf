@@ -118,7 +118,7 @@ process bowtie {
     set fastq_id, file(fastq_pair) from MAIN_trimmomatic_out
 
     output:
-    set fastq_if , "${fastq_id}*.headersRenamed_*.fq.gz" into UNMAPPED_out
+    set fastq_id , "${fastq_id}*.headersRenamed_*.fq.gz" into UNMAPPED_out
 
     script:
     """
