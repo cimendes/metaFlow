@@ -7,6 +7,13 @@ IN_trimmomatic_opts = Channel
                         params.trimTrailing,
                         params.trimMinLength])
 
+// SPADES CHANNELS //
+IN_spades_opts = Channel
+                .value([params.spadesMinCoverage,
+                        params.spadesMinKmerCoverage])
+IN_spades_kmers = Channel
+                .value(params.spadesKmers)
+
 /** 1. INTEGRITY_COVERAGE - MAIN
 This process will check the integrity, encoding and get the estimated
 coverage for each FastQ pair. Corrupted FastQ files will also be detected
@@ -131,5 +138,30 @@ process bowtie {
     python /NGStools/renamePE_samtools/renamePE_samtoolsFASTQ.py -1 ${fastq_id}_unmapped_1.fq -2 ${fastq_id}_unmapped_2.fq
 
     gzip *.headersRenamed_*.fq
+    """
+}
+
+/** METASPADES - MAIN
+This process will execute metaSPAdes
+*/
+process metaspades {
+
+    tag { fastq_id }
+
+    input
+    set fastq_id, file(fastq_pair) from UNMAPPED_out
+    //val opts from IN_spades_opts
+    //val kmers from IN_spades_kmers
+
+    output:
+    set fastq_id, file('*_spades.assembly.fasta') optional true into MAIN_spades_out
+    //set fastq_id, val("spades"), file(".status") into STATUS_spades
+
+    script:
+    //template "spades.py"
+    """
+
+    metaspades.py -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} --cov-cutoff 2
+
     """
 }
