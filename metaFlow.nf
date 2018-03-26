@@ -148,10 +148,10 @@ process metaspades {
 
     tag { fastq_id }
 
-    input
+    input:
     set fastq_id, file(fastq_pair) from UNMAPPED_out
-    //val opts from IN_spades_opts
-    //val kmers from IN_spades_kmers
+    val opts from IN_spades_opts
+    val kmers from IN_spades_kmers
 
     output:
     set fastq_id, file('*_spades.assembly.fasta') optional true into MAIN_spades_out
