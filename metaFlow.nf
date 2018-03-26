@@ -161,7 +161,7 @@ process metaspades {
     //template "spades.py"
     """
 
-    metaspades.py -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} --cov-cutoff 2
+    metaspades.py -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} --cov-cutoff 2 -o .
 
     """
 }
