@@ -154,7 +154,7 @@ process metaspades {
     val kmers from IN_spades_kmers
 
     output:
-    set fastq_id, file('*_spades.assembly.fasta') optional true into MAIN_spades_out
+    set fastq_id, file('*_contigs.fasta') into MAIN_spades_out
     //set fastq_id, val("spades"), file(".status") into STATUS_spades
 
     script:
@@ -162,6 +162,8 @@ process metaspades {
     """
 
     metaspades.py -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -o .
+
+    mv contigs.fasta ${fastq_id}_contigs.fasta
 
     """
 }
