@@ -127,8 +127,6 @@ process bowtie {
 
     script:
     """
-    echo ${fastq_pair}
-
     bowtie2 -x /index_hg19/hg19 -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -p 3 > ${fastq_id}.bam
 
     samtools view -buh -f 12 -o ${fastq_id}_samtools.bam -@ 2 ${fastq_id}.bam
@@ -164,6 +162,30 @@ process metaspades {
     metaspades.py -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -o .
 
     mv contigs.fasta ${fastq_id}_contigs.fasta
+
+    """
+}
+
+/** BOWTIE ASSEMBLY - MAIN
+This process will execute Bowtie on the assembly
+with the filtered read data
+*/
+process bowtie_assembly {
+
+    tag { fastq_id }
+
+    input:
+    set fastq_id, file(assembly) from MAIN_spades_out
+    set fastq_id, file(fastq_pair) from UNMAPPED_out
+
+    output:
+    set fastq_id, file('*.bam') into MAIN_bowtie_assembly
+
+    script:
+    """
+    bowtie2-build ${assembly} assembly_index
+
+    bowtie2 -x assembly_index -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -p 3 > ${fastq_id}.bam
 
     """
 }
