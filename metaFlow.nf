@@ -123,7 +123,7 @@ process bowtie {
     set fastq_id, file(fastq_pair) from MAIN_trimmomatic_out
 
     output:
-    set fastq_id , "${fastq_id}*.headersRenamed_*.fq.gz" into {UNMAPPED_out ; UNMAPPED_out_2}
+    set fastq_id , "${fastq_id}*.headersRenamed_*.fq.gz" into UNMAPPED_out
 
     script:
     """
@@ -139,6 +139,10 @@ process bowtie {
     """
 }
 
+UNMMAPPED_forAssembly = Channel.create()
+UNMMAPPED_forBowtie = Channel.create()
+UNMAPPED_out.into{ UNMMAPPED_forAssembly ; UNMMAPPED_forBowtie}
+
 /** METASPADES - MAIN
 This process will execute metaSPAdes
 */
@@ -147,7 +151,7 @@ process metaspades {
     tag { fastq_id }
 
     input:
-    set fastq_id, file(fastq_pair) from UNMAPPED_out
+    set fastq_id, file(fastq_pair) from UNMMAPPED_forAssembly
     val opts from IN_spades_opts
     val kmers from IN_spades_kmers
 
@@ -176,7 +180,7 @@ process bowtie_assembly {
 
     input:
     set fastq_id, file(assembly) from MAIN_spades_out
-    set fastq_id, file(fastq_pair) from UNMAPPED_out_2
+    set fastq_id, file(fastq_pair) from UNMMAPPED_forBowtie
 
     output:
     set fastq_id, file('*.bam') into MAIN_bowtie_assembly
