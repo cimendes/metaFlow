@@ -123,7 +123,7 @@ process bowtie {
     set fastq_id, file(fastq_pair) from MAIN_trimmomatic_out
 
     output:
-    set fastq_id , "${fastq_id}*.headersRenamed_*.fq.gz" into UNMAPPED_out
+    set fastq_id , "${fastq_id}*.headersRenamed_*.fq.gz" into {UNMAPPED_out; UNMAPPED_out_2}
 
     script:
     """
@@ -176,7 +176,7 @@ process bowtie_assembly {
 
     input:
     set fastq_id, file(assembly) from MAIN_spades_out
-    set fastq_id, file(fastq_pair) from UNMAPPED_out
+    set fastq_id, file(fastq_pair) from UNMAPPED_out_2
 
     output:
     set fastq_id, file('*.bam') into MAIN_bowtie_assembly
