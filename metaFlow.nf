@@ -173,6 +173,7 @@ process metaspades {
 /** BOWTIE ASSEMBLY - MAIN
 This process will execute Bowtie on the assembly
 with the filtered read data
+TODO - Fix the bowtie index name
 */
 process bowtie_assembly {
 
@@ -187,8 +188,8 @@ process bowtie_assembly {
 
     script:
     """
-    bowtie2-build ${assembly} ${fastq_id}
+    bowtie2-build ${assembly}
 
-    bowtie2 -x ${fastq_id} -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -p 3 > ${fastq_id}.bam
+    bowtie2 -x first_pe_contigs.fasta -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -p 3 > ${fastq_id}.bam
     """
 }
