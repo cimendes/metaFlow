@@ -187,7 +187,7 @@ process bowtie_assembly {
 
     script:
     """
-    bowtie2-build ${assembly} assembly_index
+    bowtie2-build ${assembly} "assembly_index"
 
     bowtie2 -x assembly_index -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -p 3 > ${fastq_id}.bam
 
