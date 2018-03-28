@@ -189,7 +189,7 @@ process bowtie_assembly {
     """
     bowtie2-build ${assembly}
 
-    bowtie2 -x first_pe_contigs -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -p 3 > ${fastq_id}.bam
+    bowtie2 -x first_pe_contigs.fasta -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -p 3 > ${fastq_id}.bam
 
     """
 }
