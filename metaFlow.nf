@@ -170,6 +170,10 @@ process metaspades {
     """
 }
 
+MAIN_spades_out_mapping = Channel.create()
+MAIN_spades_out_card_rgi = Channel.create()
+MAIN_spades_out.into{MAIN_spades_out_mapping ; MAIN_spades_out_card_rgi}
+
 /** BOWTIE ASSEMBLY - MAIN
 This process will execute Bowtie on the assembly
 with the filtered read data
@@ -180,7 +184,7 @@ process bowtie_assembly {
     tag { fastq_id }
 
     input:
-    set fastq_id, file(assembly) from MAIN_spades_out
+    set fastq_id, file(assembly) from MAIN_spades_out_mapping
     set fastq_id, file(fastq_pair) from UNMMAPPED_forBowtie
 
     output:
@@ -191,5 +195,23 @@ process bowtie_assembly {
     bowtie2-build ${assembly}
 
     bowtie2 -x first_pe_contigs.fasta -1 ${fastq_pair[0]} -2 ${fastq_pair[1]} -p 3 > ${fastq_id}.bam
+    """
+}
+
+/** CARD RGI IMPLEMENTATION - MAIN
+This process will execute CARD's RGI on the
+assembly.
+*/
+process card_rgi {
+
+    tag { fastq_id }
+
+    input:
+    set fastq_id, file(assembly) from MAIN_spades_out_card_rgi
+
+    script:
+    """
+    rgi database --version
+
     """
 }
