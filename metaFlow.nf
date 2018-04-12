@@ -213,12 +213,12 @@ process card_rgi {
     """
 
     echo ${assembly}
-    
+
     rgi database --version
 
     rgi main --help
 
-    rgi main --input_sequence ./${assembly} --output_file card_rgi.out --input_type contig --alignment_tool DIAMOND--low_quality -d wgs --clean -v
+    rgi main --input_sequence ./${assembly} --output_file card_rgi.out --input_type contig --alignment_tool DIAMOND --low_quality -d wgs --clean -v
 
     rgi tab --help
 
