@@ -156,7 +156,7 @@ process metaspades {
     val kmers from IN_spades_kmers
 
     output:
-    set fastq_id, file('*_contigs.fasta') into MAIN_spades_out
+    set fastq_id, file('${fastq_id}_contigs.fasta') into MAIN_spades_out
     //set fastq_id, val("spades"), file(".status") into STATUS_spades
 
     script:
@@ -211,7 +211,7 @@ process card_rgi {
 
     script:
     """
-
+    #ERROR 2_S1_L001_contigs.fasta first_pe_contigs.fasta
     echo ${assembly}
 
     rgi database --version
