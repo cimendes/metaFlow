@@ -213,7 +213,7 @@ process card_rgi {
     """
     rgi database --version
 
-    rgit main --help
+    rgi main --help
 
     rgi main --input_sequence ${assembly} --output_file card_rgi.out --input_type contig --low_quality
 
