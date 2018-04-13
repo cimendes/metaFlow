@@ -156,7 +156,7 @@ process metaspades {
     val kmers from IN_spades_kmers
 
     output:
-    set fastq_id, file('${fastq_id}_contigs.fasta') into MAIN_spades_out
+    set fastq_id, "${fastq_id}_contigs.fasta" into MAIN_spades_out
     //set fastq_id, val("spades"), file(".status") into STATUS_spades
 
     script:
