@@ -211,16 +211,9 @@ process card_rgi {
 
     script:
     """
-    #ERROR 2_S1_L001_contigs.fasta first_pe_contigs.fasta
-    echo ${assembly}
+    rgi main --input_sequence ${assembly} --output_file card_rgi.jason --input_type contig --alignment_tool DIAMOND --low_quality -d wgs --clean -v
 
-    rgi database --version
-
-    rgi main --help
-
-    rgi main --input_sequence ./${assembly} --output_file card_rgi.out --input_type contig --alignment_tool DIAMOND --low_quality -d wgs --clean -v
-
-    rgi tab --help
+    #rgi tab -i  card_rgi.jason
 
     """
 }
