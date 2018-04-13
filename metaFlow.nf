@@ -211,7 +211,7 @@ process card_rgi {
 
     script:
     """
-    rgi main --input_sequence ${assembly} --output_file card_rgi.jason --input_type contig --alignment_tool DIAMOND --low_quality -d wgs --clean -v
+    rgi main --input_sequence ${assembly} --output_file card_rgi.jason --input_type contig --alignment_tool DIAMOND --low_quality -d wgs --clean
 
     #rgi tab -i  card_rgi.jason
 
