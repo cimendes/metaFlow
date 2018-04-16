@@ -141,7 +141,8 @@ process bowtie {
 
 UNMMAPPED_forAssembly = Channel.create()
 UNMMAPPED_forBowtie = Channel.create()
-UNMAPPED_out.into{ UNMMAPPED_forAssembly ; UNMMAPPED_forBowtie}
+UNMAPPED_forCARDrgi = Channel.create()
+UNMAPPED_out.into{ UNMMAPPED_forAssembly ; UNMMAPPED_forBowtie ; UNMAPPED_forCARDrgi}
 
 /** METASPADES - MAIN
 This process will execute metaSPAdes
@@ -167,7 +168,7 @@ process metaspades {
 
     mv contigs.fasta ${fastq_id}_contigs.fasta
 
-    sed -i 's/>/>${fastq_id}/g ${fastq_id}_contigs.fasta'
+    sed -i 's/>/>${fastq_id}_/g' ${fastq_id}_contigs.fasta
     """
 }
 
@@ -178,7 +179,6 @@ MAIN_spades_out.into{MAIN_spades_out_mapping ; MAIN_spades_out_card_rgi}
 /** BOWTIE ASSEMBLY - MAIN
 This process will execute Bowtie on the assembly
 with the filtered read data
-TODO - Fix the bowtie index name
 */
 process bowtie_assembly {
 
@@ -203,16 +203,33 @@ process bowtie_assembly {
 This process will execute CARD's RGI on the
 assembly.
 */
-process card_rgi {
+process card_rgi_assembly{
 
     tag { fastq_id }
 
     input:
     set fastq_id, file(assembly) from MAIN_spades_out_card_rgi
 
+    output
+
+    set fastq_id, ""${fastq_id}_card_rgi.txt" into RGI_assembly
+
     script:
     """
-    rgi main --input_sequence ${assembly} --output_file card_rgi --input_type contig --alignment_tool DIAMOND --low_quality -d wgs --clean
-
+    rgi main --input_sequence ${assembly} --output_file ${fastq_id}_card_rgi --input_type contig --alignment_tool DIAMOND --low_quality --include_loose -d wgs --clean
     """
+}
+
+/** CARD RGI IMPLEMENTATION - MAIN
+This process will execute CARD's RGI on the
+reads.
+*/
+process card_rgi_reads{
+
+    tag { fastq_id }
+
+    input:
+    set fastq_id, file(fastq_pair) from UNMAPPED_forCARDrgi
+
+    script
 }
