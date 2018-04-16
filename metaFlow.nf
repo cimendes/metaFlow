@@ -212,7 +212,7 @@ process card_rgi_assembly{
 
     output
 
-    set fastq_id, ""${fastq_id}_card_rgi.txt" into RGI_assembly
+    set fastq_id, "${fastq_id}_card_rgi.txt" into RGI_assembly
 
     script:
     """
@@ -231,5 +231,8 @@ process card_rgi_reads{
     input:
     set fastq_id, file(fastq_pair) from UNMAPPED_forCARDrgi
 
-    script
+    script:
+    """
+    echo $fastq_id
+    """
 }
