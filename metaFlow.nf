@@ -210,8 +210,7 @@ process card_rgi_assembly{
     input:
     set fastq_id, file(assembly) from MAIN_spades_out_card_rgi
 
-    output
-
+    output:
     set fastq_id, "${fastq_id}_card_rgi.txt" into RGI_assembly
 
     script:
